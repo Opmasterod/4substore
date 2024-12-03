@@ -85,8 +85,8 @@ async def start_command(client: Client, message: Message):
             except:
                 pass
 
-        SD = await message.reply_text("‼️ Watch Fast Lectures and Notes before Deleted after 5Hours.\n\nIf Your Lecture Pdf Deleted Don't worry you again able to access 🥰\n\n Go back from where you got link and again click on link and get Again\n\n𝐒𝐨𝐫𝐫𝐲,𝐅𝐨𝐫 𝐭𝐡𝐢𝐬 𝐍𝐨𝐭 𝐅𝐨𝐫𝐰𝐚𝐫𝐝𝐢𝐧𝐠 𝐨𝐧 𝐚𝐧𝐝 𝐧𝐨𝐭 𝐟𝐨𝐫 𝐚 𝐟𝐮𝐥𝐥 𝐭𝐢𝐦𝐞 𝐛𝐜𝐳 𝐰𝐞 𝐠𝐨𝐭 𝐜𝐨𝐩𝐲𝐫𝐢𝐠𝐡𝐭𝐬 😖😖 🙏")
-        await asyncio.sleep(18000)
+        SD = await message.reply_text("‼️ Watch Fast Lectures and Notes before Deleted after 2Hours.\n\nIf Your Lecture Pdf Deleted Don't worry you again able to access 🥰\n\n Go back from where you got link and again click on link and get Again\n\n𝐒𝐨𝐫𝐫𝐲,𝐅𝐨𝐫 𝐭𝐡𝐢𝐬 𝐍𝐨𝐭 𝐅𝐨𝐫𝐰𝐚𝐫𝐝𝐢𝐧𝐠 𝐨𝐧 𝐚𝐧𝐝 𝐧𝐨𝐭 𝐟𝐨𝐫 𝐚 𝐟𝐮𝐥𝐥 𝐭𝐢𝐦𝐞 𝐛𝐜𝐳 𝐰𝐞 𝐠𝐨𝐭 𝐜𝐨𝐩𝐲𝐫𝐢𝐠𝐡𝐭𝐬 😖😖 🙏")
+        await asyncio.sleep(7200)
 
         for snt_msg in snt_msgs:
             try:
@@ -98,12 +98,12 @@ async def start_command(client: Client, message: Message):
     else:
         reply_markup = InlineKeyboardMarkup(
             [[
-            InlineKeyboardButton("𝗝𝗢𝗜𝗡 𝗢𝗨𝗥 𝗡𝗘𝗪 𝗔𝗗𝗗𝗟𝗜𝗦𝗧 🙏", url="https://t.me/addlist/0W1WED6AnkI4Zjg9")
+            InlineKeyboardButton("𝗠𝗔𝗜𝗡 𝗪𝗘𝗕𝗦𝗜𝗧𝗘 😁", url="https://t.me/HIDDEN_OFFICIALS_3/3")
             ],[
-            InlineKeyboardButton("𝐀𝐏𝐍𝐈 𝐊𝐀𝐊𝐒𝐇𝐀 𝐁𝐎𝐓 😈", url="https://t.me/HIDDEN_LEAKED_BOT")
+            InlineKeyboardButton("𝐀𝐏𝐍𝐈 𝐊𝐀𝐊𝐒𝐇𝐀 𝗪𝗘𝗕𝗦𝗜𝗧𝗘 😱", url="https://yashyasag.github.io/tesetoss")
             ],[
-            InlineKeyboardButton("Team Hidden", url="https://t.me/HIDDEN_OFFICIALS_1"),
-            InlineKeyboardButton("ᴛᴇsᴛ sᴇʀɪᴇs", url="https://t.me/+Fpzh5FbKcoNhZGZl")
+            InlineKeyboardButton("VISHESH BATCH", url="https://yashyasag.github.io/kuchnew/"),
+            InlineKeyboardButton("VIJETA BATCH", url="https://hiddop.github.io/12thies/")
             ]]
         )
         await message.reply_text(
