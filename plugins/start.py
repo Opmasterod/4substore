@@ -75,7 +75,7 @@ async def start_command(client: Client, message: Message):
             if DISABLE_CHANNEL_BUTTON:
                 reply_markup = InlineKeyboardMarkup([[InlineKeyboardButton("🌟 𝗠𝗢𝗥𝗘 𝗪𝗘𝗕𝗦𝗜𝗧𝗘𝗦 ❤", url='https://t.me/HIDDEN_OFFICIALS_3/3')]])
             else:
-                reply_markup = InlineKeyboardMarkup([[InlineKeyboardButton("𝗠𝗢𝗥𝗘 𝗪𝗘𝗕𝗦𝗜𝗧𝗘𝗦", url='https://t.me/HIDDEN_OFFICIALS_3/3')]])
+                reply_markup = InlineKeyboardMarkup([[InlineKeyboardButton("🌟 𝗠𝗢𝗥𝗘 𝗪𝗘𝗕𝗦𝗜𝗧𝗘𝗦 ❤", url='https://t.me/HIDDEN_OFFICIALS_3/3')]])
 
             try:
                 copied_msg = await msg.copy(chat_id=message.from_user.id, caption=caption, parse_mode=ParseMode.HTML, 
