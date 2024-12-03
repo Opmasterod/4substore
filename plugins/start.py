@@ -61,24 +61,37 @@ async def start_command(client: Client, message: Message):
             return
         await temp_msg.delete()
 
-        for msg in messages:
+        snt_msgs = []
 
+        for msg in messages:
             if bool(CUSTOM_CAPTION) & bool(msg.document):
-                caption = CUSTOM_CAPTION.format(previouscaption = "" if not msg.caption else msg.caption.html, filename = msg.document.file_name)
+                caption = CUSTOM_CAPTION.format(previouscaption="" if not msg.caption else msg.caption.html, filename=msg.document.file_name)
             else:
                 caption = "" if not msg.caption else msg.caption.html
 
             if DISABLE_CHANNEL_BUTTON:
-                reply_markup = msg.reply_markup
+                reply_markup = InlineKeyboardMarkup([[InlineKeyboardButton("𝗠𝗢𝗥𝗘 𝗪𝗘𝗕𝗦𝗜𝗧𝗘𝗦", url='https://t.me/HIDDEN_OFFICIALS_3/3')]])
             else:
-                reply_markup = None
+                reply_markup = InlineKeyboardMarkup([[InlineKeyboardButton("𝗠𝗢𝗥𝗘 𝗪𝗘𝗕𝗦𝗜𝗧𝗘𝗦", url='https://t.me/HIDDEN_OFFICIALS_3/3')]])
 
             try:
-                await msg.copy(chat_id=message.from_user.id, caption = caption, parse_mode = ParseMode.HTML, reply_markup = reply_markup, protect_content=PROTECT_CONTENT)
+                snt_msg = await msg.copy(chat_id=message.from_user.id, caption=caption, parse_mode=ParseMode.HTML, reply_markup=reply_markup, protect_content=PROTECT_CONTENT)
                 await asyncio.sleep(0.5)
+                snt_msgs.append(snt_msg)
             except FloodWait as e:
                 await asyncio.sleep(e.x)
-                await msg.copy(chat_id=message.from_user.id, caption = caption, parse_mode = ParseMode.HTML, reply_markup = reply_markup, protect_content=PROTECT_CONTENT)
+                snt_msg = await msg.copy(chat_id=message.from_user.id, caption=caption, parse_mode=ParseMode.HTML, reply_markup=reply_markup, protect_content=PROTECT_CONTENT)
+                snt_msgs.append(snt_msg)
+            except:
+                pass
+
+        SD = await message.reply_text("‼️ Watch Fast Lectures and Notes before Deleted after 5Hours.\n\nIf Your Lecture Pdf Deleted Don't worry you again able to access 🥰\n\n Go back from where you got link and again click on link and get Again\n\n𝐒𝐨𝐫𝐫𝐲,𝐅𝐨𝐫 𝐭𝐡𝐢𝐬 𝐍𝐨𝐭 𝐅𝐨𝐫𝐰𝐚𝐫𝐝𝐢𝐧𝐠 𝐨𝐧 𝐚𝐧𝐝 𝐧𝐨𝐭 𝐟𝐨𝐫 𝐚 𝐟𝐮𝐥𝐥 𝐭𝐢𝐦𝐞 𝐛𝐜𝐳 𝐰𝐞 𝐠𝐨𝐭 𝐜𝐨𝐩𝐲𝐫𝐢𝐠𝐡𝐭𝐬 😖😖 🙏")
+        await asyncio.sleep(18000)
+
+        for snt_msg in snt_msgs:
+            try:
+               await snt_msg.delete()
+               await SD.delete()
             except:
                 pass
         return
