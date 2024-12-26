@@ -5,7 +5,9 @@
 
 import os
 import logging
+from os import environ
 from logging.handlers import RotatingFileHandler
+
 
 
 
@@ -66,6 +68,18 @@ USER_REPLY_TEXT = " "
 
 ADMINS.append(OWNER_ID)
 ADMINS.append(5191566338)
+
+STREAM_MODE = bool(environ.get('STREAM_MODE', True)) # Set True or False
+
+# If Stream Mode Is True Then Fill All Required Variable, If False Then Don't Fill.
+MULTI_CLIENT = False
+SLEEP_THRESHOLD = int(environ.get('SLEEP_THRESHOLD', '60'))
+PING_INTERVAL = int(environ.get("PING_INTERVAL", "1200"))  # 20 minutes
+if 'DYNO' in environ:
+    ON_HEROKU = True
+else:
+    ON_HEROKU = False
+URL = environ.get("URL", "https://testofvjfilter-1fa60b1b8498.herokuapp.com/")
 
 LOG_FILE_NAME = "filesharingbot.txt"
 
