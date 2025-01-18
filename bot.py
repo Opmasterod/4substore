@@ -9,7 +9,7 @@ from pyrogram.enums import ParseMode
 import sys
 from datetime import datetime
 
-from config import API_HASH, APP_ID, LOGGER, TG_BOT_TOKEN, TG_BOT_WORKERS, FORCE_SUB_CHANNEL, FORCE_SUB_CHANNEL2, CHANNEL_ID, PORT
+from config import API_HASH, APP_ID, LOGGER, TG_BOT_TOKEN, TG_BOT_WORKERS, FORCE_SUB_CHANNEL, FORCE_SUB_CHANNEL2, CHANNEL_ID1, PORT, CHANNEL_ID2
 
 
 name ="""
@@ -63,13 +63,21 @@ class Bot(Client):
                 self.LOGGER(__name__).info("\nBot Stopped. https://t.me/weebs_support for support")
                 sys.exit()
         try:
-            db_channel = await self.get_chat(CHANNEL_ID)
-            self.db_channel = db_channel
-            test = await self.send_message(chat_id = db_channel.id, text = "Test Message")
-            await test.delete()
+            db_channel1 = await self.get_chat(CHANNEL_ID1)
+            self.db_channel = db_channel1
+            test1 = await self.send_message(chat_id = db_channel1.id, text = "Test Message")
+            await test1.delete()
+
+        try:
+            db_channel2 = await self.get_chat(CHANNEL_ID2)
+            self.db_channel = db_channel2
+            test2 = await self.send_message(chat_id = db_channel2.id, text = "Test Message")
+            await test2.delete()
+         
         except Exception as e:
             self.LOGGER(__name__).warning(e)
-            self.LOGGER(__name__).warning(f"Make Sure bot is Admin in DB Channel, and Double check the CHANNEL_ID Value, Current Value {CHANNEL_ID}")
+            self.LOGGER(__name__).warning(f"Make Sure bot is Admin in DB Channel, and Double check the CHANNEL_ID Value, Current Value {CHANNEL_ID1}")
+            self.LOGGER(__name__).warning(f"Make Sure bot is Admin in DB Channel, and Double check the CHANNEL_ID Value, Current Value {CHANNEL_ID2}")
             self.LOGGER(__name__).info("\nBot Stopped. Join https://t.me/weebs_support for support")
             sys.exit()
 
