@@ -29,27 +29,38 @@ async def start_command(client: Client, message: Message):
             return
         string = await decode(base64_string)
         argument = string.split("-")
+        ids = []
         if len(argument) == 3:
             try:
-                start = int(int(argument[1]) / abs(client.db_channel.id))
-                end = int(int(argument[2]) / abs(client.db_channel.id))
+                start1 = int(int(argument[1]) / abs(client.db_channel1.id))
+                end1 = int(int(argument[2]) / abs(client.db_channel1.id))
+                start2 = int(int(argument[1]) / abs(client.db_channel2.id))
+                end2 = int(int(argument[2]) / abs(client.db_channel2.id))
             except:
                 return
-            if start <= end:
-                ids = range(start,end+1)
+
+            if start1 <= end1:
+                ids.extend(range(start1, end1 + 1))
             else:
-                ids = []
-                i = start
-                while True:
+                i = start1
+                while i >= end1:
                     ids.append(i)
                     i -= 1
-                    if i < end:
-                        break
+
+            if start2 <= end2:
+                ids.extend(range(start2, end2 + 1))
+            else:
+                i = start2
+                while i >= end2:
+                    ids.append(i)
+
         elif len(argument) == 2:
             try:
-                ids = [int(int(argument[1]) / abs(client.db_channel.id))]
+                ids.append(int(int(argument[1]) / abs(client.db_channel1.id)))
+                ids.append(int(int(argument[1]) / abs(client.db_channel2.id)))
             except:
                 return
+
         temp_msg = await message.reply("Wait A Second...")
         try:
             messages = await get_messages(client, ids)
@@ -57,6 +68,7 @@ async def start_command(client: Client, message: Message):
             await message.reply_text("Something went wrong..!")
             return
         await temp_msg.delete()
+
 
         for msg in messages:
 
