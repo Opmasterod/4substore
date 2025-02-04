@@ -138,8 +138,7 @@ async def start_command(client: Client, message: Message):
             ],[
             InlineKeyboardButton("𝐀𝐏𝐍𝐈 𝐊𝐀𝐊𝐒𝐇𝐀 𝗪𝗘𝗕𝗦𝗜𝗧𝗘 😱", url="https://yashyasag.github.io/tesetoss")
             ],[
-            InlineKeyboardButton("VISHESH BATCH", url="https://yashyasag.github.io/kuchnew/"),
-            InlineKeyboardButton("VIJETA BATCH", url="https://hiddop.github.io/12thies/")
+            InlineKeyboardButton("MIT SCHOOL 😁", url="https://mits-ak.github.io/mitbyhh/")
             ]]
         )
         await message.reply_text(
@@ -171,11 +170,11 @@ REPLY_ERROR = "<code>Use this command as a reply to any telegram message without
 async def not_joined(client: Client, message: Message):
     buttons = [
         [
-            InlineKeyboardButton(text="JOIN 1st 👍", url=client.invitelink2),
-            InlineKeyboardButton(text="Join 2nd 😁", url=client.invitelink3),
+            InlineKeyboardButton(text="1st Channel", url=client.invitelink2),
+            InlineKeyboardButton(text="2nd Channel", url=client.invitelink3),
         ],
         [
-            InlineKeyboardButton(text="JOIN 3rd CHANNEL 👻", url=client.invitelink),
+            InlineKeyboardButton(text="3rd channel", url=client.invitelink),
         ]
     ]
     try:
