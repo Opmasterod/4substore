@@ -53,14 +53,7 @@ except ValueError:
 #Force sub message 
 FORCE_MSG = os.environ.get("FORCE_SUB_MESSAGE", "Hey , {first}\n\n<b>Bro/Sister first of all you have to join our 3 channels using below buttons click on button join channels one by one and then click on NOW CLICK HERE button</b>\n\nYou have to do it only 1 time 😍 \n\nAny problem - @HACKHEISTBOT")
 #set your Custom Caption here, Keep None for Disable Custom Caption
-CUSTOM_CAPTION = os.environ.get("CUSTOM_CAPTION", """<b>{previouscaption}</b>
-<b>━━━━━━━━━━━━━━━━━◇</b>
-<b>⛧ 🄱🅈 :-) </b><b><a href="https://yashyasag.github.io/hiddens">ℍ𝔸ℂ𝕂ℍ𝔼𝕀𝕊𝕋 😈</a></b> <b>♛</b>
-<b>━━━━━━━━━━━━━━━━━◇</b>
-<b>🙏 sʜᴀʀᴇ ᴀɴᴅ sᴜᴘᴘᴏʀᴛ ᴜs 👇</b>
-<b>—————————————————</b>
-<b><a href="https://yashyasag.github.io/hiddens">🚀 𝗠𝗢𝗥𝗘 𝗪𝗘𝗕𝗦𝗜𝗧𝗘𝗦 🌟</a></b>
-<b>—————————————————</b>""")
+CUSTOM_CAPTION = os.environ.get("CUSTOM_CAPTION", "<b>{previouscaption}</b>\n<b>━━━━━━━━━━━━━━━━━◇</b>\n<b>⛧ 🄱🅈 :-) </b><b><a href="https://yashyasag.github.io/hiddens">ℍ𝔸ℂ𝕂ℍ𝔼𝕀𝕊𝕋 😈</a></b> <b>♛</b>\n<b>━━━━━━━━━━━━━━━━━◇</b>\n<b>🙏 sʜᴀʀᴇ ᴀɴᴅ sᴜᴘᴘᴏʀᴛ ᴜs 👇</b>\n<b>—————————————————</b>\n<b><a href="https://yashyasag.github.io/hiddens">🚀 𝗠𝗢𝗥𝗘 𝗪𝗘𝗕𝗦𝗜𝗧𝗘𝗦 🌟</a></b>\n<b>—————————————————</b>")
 
 #set True if you want to prevent users from forwarding files from bot
 PROTECT_CONTENT = True if os.environ.get('PROTECT_CONTENT', "False") == "True" else False
