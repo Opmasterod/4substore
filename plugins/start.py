@@ -123,7 +123,10 @@ async def start_command(client: Client, message: Message):
 # Notify user about auto-deletion
         k = await client.send_message(
             chat_id=message.from_user.id,
-            text=f"<b>𝗕𝘂𝗱𝗱𝘆 𝘆𝗼𝘂𝗿 𝗿𝗲𝗾𝘂𝗲𝘀𝘁𝗲𝗱 𝗺𝗮𝘁𝗲𝗿𝗶𝗮𝗹 𝗴𝗼𝗻𝗲 𝗱𝗲𝗹𝗲𝘁𝗲 😕 𝗶𝗻 {file_auto_delete}</b> <br> All credits for this material goes to HACKHEIST 😈",
+            text=f"""
+            <b>𝗕𝘂𝗱𝗱𝘆 𝘆𝗼𝘂𝗿 𝗿𝗲𝗾𝘂𝗲𝘀𝘁𝗲𝗱 𝗺𝗮𝘁𝗲𝗿𝗶𝗮𝗹 𝗴𝗼𝗻𝗲 𝗱𝗲𝗹𝗲𝘁𝗲 😕 𝗶𝗻 {file_auto_delete}</b>
+            All credits for this material goes to HACKHEIST 😈
+            <b>But Don,t worry 🥰 you again access through my websites 🌟</b>""",
         )
 
 # Schedule the file deletion
