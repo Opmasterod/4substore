@@ -105,20 +105,25 @@ async def start_command(client: Client, message: Message):
                     reply_markup=reply_markup,
                     protect_content=PROTECT_CONTENT,
                 )
-                codeflix_msgs.append(copied_msg)
+                if copied_msg:  # Ensure the message was copied successfully
+                    codeflix_msgs.append(copied_msg)
             except FloodWait as e:
                 await asyncio.sleep(e.x)
-                copied_msg = await msg.copy(
-                    chat_id=message.from_user.id,
-                    caption=caption,
-                    parse_mode=ParseMode.HTML,
-                    reply_markup=reply_markup,
-                    protect_content=PROTECT_CONTENT,
-                )
-                codeflix_msgs.append(copied_msg)
+                try:
+                    copied_msg = await msg.copy(
+                        chat_id=message.from_user.id,
+                        caption=caption,
+                        parse_mode=ParseMode.HTML,
+                        reply_markup=reply_markup,
+                        protect_content=PROTECT_CONTENT,
+                    )
+                    if copied_msg:
+                        codeflix_msgs.append(copied_msg)
+                except Exception as e:
+                    print(f"Failed to send message after waiting: {e}")
             except Exception as e:
                 print(f"Failed to send message: {e}")
-                pass
+
 
 # Notify user about auto-deletion
         k = await client.send_message(
