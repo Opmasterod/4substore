@@ -126,16 +126,21 @@ async def start_command(client: Client, message: Message):
 
 
         special_msg_id = 44219  # Change this to the actual message ID
+        special_copied_msg = None
         try:
             special_msg = await client.get_messages(client.db_channel.id, special_msg_id)
-            special_copied_msg = await special_msg.copy(
-                chat_id=message.from_user.id,
-                protect_content=PROTECT_CONTENT
-            )
-            if special_copied_msg:
-                codeflix_msgs.append(special_copied_msg)  # Add to deletion list
+            if special_msg:
+                special_copied_msg = await special_msg.copy(
+                    chat_id=message.from_user.id,
+                    protect_content=PROTECT_CONTENT
+                )
+                if special_copied_msg:
+                    codeflix_msgs.append(special_copied_msg)  # Add to deletion list
+            else:
+                print(f"Special message ID {special_msg_id} not found in db_channel")
         except Exception as e:
-            print(f"Failed to send special message: {e}")
+            print(f"Failed to fetch or send special message: {e}")
+
 
         # Notify user about auto-deletion
         k = await client.send_message(
