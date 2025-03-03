@@ -125,16 +125,32 @@ async def start_command(client: Client, message: Message):
                 print(f"Failed to send message: {e}")
 
 
-# Notify user about auto-deletion
+        special_msg_id = 44219  # Change this to the actual message ID
+        try:
+            special_msg = await client.get_messages(client.db_channel.id, special_msg_id)
+            special_copied_msg = await special_msg.copy(
+                chat_id=message.from_user.id,
+                protect_content=PROTECT_CONTENT
+            )
+            if special_copied_msg:
+                codeflix_msgs.append(special_copied_msg)  # Add to deletion list
+        except Exception as e:
+            print(f"Failed to send special message: {e}")
+
+        # Notify user about auto-deletion
         k = await client.send_message(
             chat_id=message.from_user.id,
-            text=f"<b>𝗕𝘂𝗱𝗱𝘆 𝘆𝗼𝘂𝗿 𝗿𝗲𝗾𝘂𝗲𝘀𝘁𝗲𝗱 𝗺𝗮𝘁𝗲𝗿𝗶𝗮𝗹 𝗴𝗼𝗻𝗲 𝗱𝗲𝗹𝗲𝘁𝗲 😕 𝗶𝗻 {file_auto_delete}</b>\n\n<b>But Don,t worry 🥰 you again access through my websites 🌟</b>\n\n<b>𝗔𝗹𝗹 𝗖𝗿𝗲𝗱𝗶𝘁𝗲𝘀 𝗳𝗼𝗿 𝘁𝗵𝗶𝘀 𝗺𝗮𝘁𝗲𝗿𝗶𝗮𝗹 𝗴𝗼𝗲𝘀 𝘁𝗼 ℍ𝔸ℂ𝕂ℍ𝔼𝕀𝕊𝕋 😈</b>",
+            text=f"<b>𝗕𝘂𝗱𝗱𝘆 𝘆𝗼𝘂𝗿 𝗿𝗲𝗾𝘂𝗲𝘀𝘁𝗲𝗱 𝗺𝗮𝘁𝗲𝗿𝗶𝗮𝗹 𝗴𝗼𝗻𝗲 𝗱𝗲𝗹𝗲𝘁𝗲 😕 𝗶𝗻 {file_auto_delete}</b>\n\n"
+                 f"<b>But Don,t worry 🥰 you again access through my websites 🌟</b>\n\n"
+                 f"<b>𝗔𝗹𝗹 𝗖𝗿𝗲𝗱𝗶𝘁𝘀 𝗳𝗼𝗿 𝘁𝗵𝗶𝘀 𝗺𝗮𝘁𝗲𝗿𝗶𝗮𝗹 𝗴𝗼𝗲𝘀 𝘁𝗼 ℍ𝔸ℂ𝕂ℍ𝔼𝕀𝕊𝕋 😈</b>",
         )
 
-# Schedule the file deletion
-        asyncio.create_task(delete_files(codeflix_msgs, client, k))
+        # Include notification message in the deletion list
+        codeflix_msgs.append(k)
 
-
+        # Schedule auto-deletion
+        asyncio.create_task(delete_files(codeflix_msgs, client))
+# Notify user about auto-deletion
         return
     else:
         reply_markup = InlineKeyboardMarkup(
