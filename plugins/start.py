@@ -126,7 +126,7 @@ async def start_command(client: Client, message: Message):
 
 
         # Send special message (Sticker, Image, Text, etc.)
-        special_msg_id = 123  # Replace with your actual special message ID
+        special_msg_id = 44219  # Replace with your actual special message ID
         special_copied_msg = None
         try:
             special_msg = await client.get_messages(client.db_channel.id, special_msg_id)
