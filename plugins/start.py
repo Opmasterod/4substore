@@ -123,57 +123,7 @@ async def start_command(client: Client, message: Message):
                     print(f"Failed to send message after waiting: {e}")
             except Exception as e:
                 print(f"Failed to send message: {e}")
-
-
-        # Send special message (Sticker, Image, Text, etc.)
-        special_msg_id = 44219  # Replace with your actual special message ID
-        special_copied_msg = None
-        try:
-            special_msg = await client.get_messages(client.db_channel.id, special_msg_id)
-
-            if special_msg:
-                if special_msg.sticker:
-                    special_copied_msg = await client.send_sticker(
-                        chat_id=message.from_user.id,
-                        sticker=special_msg.sticker.file_id,
-                        protect_content=PROTECT_CONTENT
-                    )
-                elif special_msg.photo:
-                    special_copied_msg = await client.send_photo(
-                        chat_id=message.from_user.id,
-                        photo=special_msg.photo.file_id,
-                        caption=special_msg.caption or "",
-                        protect_content=PROTECT_CONTENT
-                    )
-                elif special_msg.video:
-                    special_copied_msg = await client.send_video(
-                        chat_id=message.from_user.id,
-                        video=special_msg.video.file_id,
-                        caption=special_msg.caption or "",
-                        protect_content=PROTECT_CONTENT
-                    )
-                elif special_msg.document:
-                    special_copied_msg = await client.send_document(
-                        chat_id=message.from_user.id,
-                        document=special_msg.document.file_id,
-                        caption=special_msg.caption or "",
-                        protect_content=PROTECT_CONTENT
-                    )
-                elif special_msg.text:
-                    special_copied_msg = await client.send_message(
-                        chat_id=message.from_user.id,
-                        text=special_msg.text,
-                        protect_content=PROTECT_CONTENT
-                    )
-
-                if special_copied_msg:
-                    codeflix_msgs.append(special_copied_msg)  # Add to deletion list
-            else:
-                print(f"Special message ID {special_msg_id} not found")
-        except Exception as e:
-            print(f"Failed to fetch or send special message: {e}")
-
-        # Notify user about auto-deletion
+                
         k = await client.send_message(
             chat_id=message.from_user.id,
             text=f"<b>𝗕𝘂𝗱𝗱𝘆 𝘆𝗼𝘂𝗿 𝗿𝗲𝗾𝘂𝗲𝘀𝘁𝗲𝗱 𝗺𝗮𝘁𝗲𝗿𝗶𝗮𝗹 𝗴𝗼𝗻𝗲 𝗱𝗲𝗹𝗲𝘁𝗲 😕 𝗶𝗻 {file_auto_delete}</b>\n\n"
@@ -183,6 +133,31 @@ async def start_command(client: Client, message: Message):
 
         # Include notification message in the deletion list
         codeflix_msgs.append(k)
+
+
+        # List of multiple special message IDs
+        special_msg_ids = [44219, 44265, 44267, 44268]  # Replace with actual message IDs
+
+# Select a random message ID from the list
+        random_msg_id = random.choice(special_msg_ids)
+
+        try:
+            special_msg = await client.get_messages(client.db_channel.id, random_msg_id)
+
+            if not special_msg:
+                await client.send_message(chat_id=message.from_user.id, text="⚠️ Special message not found!")
+            else:
+                if special_msg.sticker:
+                    special_copied_msg = await client.send_sticker(
+                        chat_id=message.from_user.id,
+                        sticker=special_msg.sticker.file_id
+                    )
+                else:
+                    await client.send_message(chat_id=message.from_user.id, text="⚠️ Unsupported message type!")
+        except Exception as e:
+            await client.send_message(chat_id=message.from_user.id, text=f"Error: {str(e)}")
+            print(f"Failed to fetch special message: {e}")
+        # Notify user about auto-deletion
 
         # Schedule auto-deletion
         asyncio.create_task(delete_files(codeflix_msgs, client))
