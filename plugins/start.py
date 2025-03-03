@@ -125,23 +125,53 @@ async def start_command(client: Client, message: Message):
                 print(f"Failed to send message: {e}")
 
 
-        special_msg_id = 123  # Change this to the actual sticker message ID
+        # Send special message (Sticker, Image, Text, etc.)
+        special_msg_id = 123  # Replace with your actual special message ID
         special_copied_msg = None
         try:
             special_msg = await client.get_messages(client.db_channel.id, special_msg_id)
-            if special_msg and special_msg.sticker:
-                special_copied_msg = await client.send_sticker(
-                    chat_id=message.from_user.id,
-                    sticker=special_msg.sticker.file_id,
-                    protect_content=PROTECT_CONTENT
-                )
+
+            if special_msg:
+                if special_msg.sticker:
+                    special_copied_msg = await client.send_sticker(
+                        chat_id=message.from_user.id,
+                        sticker=special_msg.sticker.file_id,
+                        protect_content=PROTECT_CONTENT
+                    )
+                elif special_msg.photo:
+                    special_copied_msg = await client.send_photo(
+                        chat_id=message.from_user.id,
+                        photo=special_msg.photo.file_id,
+                        caption=special_msg.caption or "",
+                        protect_content=PROTECT_CONTENT
+                    )
+                elif special_msg.video:
+                    special_copied_msg = await client.send_video(
+                        chat_id=message.from_user.id,
+                        video=special_msg.video.file_id,
+                        caption=special_msg.caption or "",
+                        protect_content=PROTECT_CONTENT
+                    )
+                elif special_msg.document:
+                    special_copied_msg = await client.send_document(
+                        chat_id=message.from_user.id,
+                        document=special_msg.document.file_id,
+                        caption=special_msg.caption or "",
+                        protect_content=PROTECT_CONTENT
+                    )
+                elif special_msg.text:
+                    special_copied_msg = await client.send_message(
+                        chat_id=message.from_user.id,
+                        text=special_msg.text,
+                        protect_content=PROTECT_CONTENT
+                    )
+
                 if special_copied_msg:
                     codeflix_msgs.append(special_copied_msg)  # Add to deletion list
             else:
-                print(f"Special message ID {special_msg_id} is not a sticker or not found")
+                print(f"Special message ID {special_msg_id} not found")
         except Exception as e:
-            print(f"Failed to fetch or send special sticker: {e}")
-
+            print(f"Failed to fetch or send special message: {e}")
 
         # Notify user about auto-deletion
         k = await client.send_message(
