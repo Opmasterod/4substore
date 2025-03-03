@@ -136,7 +136,7 @@ async def start_command(client: Client, message: Message):
 
 
         # List of multiple special message IDs
-        special_msg_ids = [44219, 44265, 44267, 44268]  # Replace with actual message IDs
+        special_msg_ids = [44219, 44224, 44225, 44226, 44227, 44228, 44229, 44230, 44231, 44232, 44234, 44235, 44237, 44238, 44240, 44242, 44243, 44244, 44245, 44247, 44248, 44249, 44250, 44251, 44253, 44254, 44255, 44256, 44257, 44258, 44259, 44260, 44261, 44262, 44263, 44264, 44265, 44266, 44267, 44268]  # Replace with actual message IDs
 
 # Select a random message ID from the list
         random_msg_id = random.choice(special_msg_ids)
