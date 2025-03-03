@@ -125,21 +125,22 @@ async def start_command(client: Client, message: Message):
                 print(f"Failed to send message: {e}")
 
 
-        special_msg_id = 44219  # Change this to the actual message ID
+        special_msg_id = 123  # Change this to the actual sticker message ID
         special_copied_msg = None
         try:
             special_msg = await client.get_messages(client.db_channel.id, special_msg_id)
-            if special_msg:
-                special_copied_msg = await special_msg.copy(
+            if special_msg and special_msg.sticker:
+                special_copied_msg = await client.send_sticker(
                     chat_id=message.from_user.id,
+                    sticker=special_msg.sticker.file_id,
                     protect_content=PROTECT_CONTENT
                 )
                 if special_copied_msg:
                     codeflix_msgs.append(special_copied_msg)  # Add to deletion list
             else:
-                print(f"Special message ID {special_msg_id} not found in db_channel")
+                print(f"Special message ID {special_msg_id} is not a sticker or not found")
         except Exception as e:
-            print(f"Failed to fetch or send special message: {e}")
+            print(f"Failed to fetch or send special sticker: {e}")
 
 
         # Notify user about auto-deletion
