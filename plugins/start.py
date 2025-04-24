@@ -62,24 +62,63 @@ async def start_command(client: Client, message: Message):
         codeflix_msgs = []  # List to keep track of sent messages
 
         for msg in messages:
-            caption = (CUSTOM_CAPTION.format(previouscaption="" if not msg.caption else msg.caption.html, 
-                                             filename=msg.document.file_name) if bool(CUSTOM_CAPTION) and bool(msg.document)
-                       else ("" if not msg.caption else msg.caption.html))
+            # Initialize filename and media_type with safe defaults
+            filename = "Unknown"
+            media_type = "Unknown"
+
+            # Determine the media type and filename
+            if msg.video:
+                media_type = "Video"
+                filename = msg.video.file_name if msg.video.file_name else "Unnamed Video"
+            elif msg.document:
+                filename = msg.document.file_name if msg.document.file_name else "Unnamed Document"
+                media_type = "PDF" if filename.endswith(".pdf") else "Document"
+            elif msg.photo:
+                media_type = "Image"
+                filename = "Image"
+            elif msg.text:
+                media_type = "Text"
+                filename = "Text Content"
+
+    # Generate caption
+            caption = (
+                CUSTOM_CAPTION.format(
+                    previouscaption=(msg.caption.html if msg.caption else "No caption"),
+                    filename=filename,
+                    mediatype=media_type,
+                )
+                if bool(CUSTOM_CAPTION)
+                else (msg.caption.html if msg.caption else "")
+            )
 
             reply_markup = msg.reply_markup if DISABLE_CHANNEL_BUTTON else None
 
             try:
-                copied_msg = await msg.copy(chat_id=message.from_user.id, caption=caption, parse_mode=ParseMode.HTML, 
-                                            reply_markup=reply_markup, protect_content=PROTECT_CONTENT)
-                codeflix_msgs.append(copied_msg)
+                copied_msg = await msg.copy(
+                    chat_id=message.from_user.id,
+                    caption=caption,
+                    parse_mode=ParseMode.HTML,
+                    reply_markup=reply_markup,
+                    protect_content=PROTECT_CONTENT,
+                )
+                if copied_msg:  # Ensure the message was copied successfully
+                    codeflix_msgs.append(copied_msg)
             except FloodWait as e:
                 await asyncio.sleep(e.x)
-                copied_msg = await msg.copy(chat_id=message.from_user.id, caption=caption, parse_mode=ParseMode.HTML, 
-                                            reply_markup=reply_markup, protect_content=PROTECT_CONTENT)
-                codeflix_msgs.append(copied_msg)
+                try:
+                    copied_msg = await msg.copy(
+                        chat_id=message.from_user.id,
+                        caption=caption,
+                        parse_mode=ParseMode.HTML,
+                        reply_markup=reply_markup,
+                        protect_content=PROTECT_CONTENT,
+                    )
+                    if copied_msg:
+                        codeflix_msgs.append(copied_msg)
+                except Exception as e:
+                    print(f"Failed to send message after waiting: {e}")
             except Exception as e:
                 print(f"Failed to send message: {e}")
-                pass
 
         k = await client.send_message(
             chat_id=message.from_user.id,
@@ -123,7 +162,7 @@ async def start_command(client: Client, message: Message):
     else:
         reply_markup = InlineKeyboardMarkup(
             [[
-            InlineKeyboardButton("𝗠𝗔𝗜𝗡 𝗪𝗘𝗕𝗦𝗜𝗧𝗘 😁", url="https://t.me/HIDDEN_OFFICIALS_3/3")
+            InlineKeyboardButton("𝗠𝗔𝗜𝗡 𝗪𝗘𝗕𝗦𝗜𝗧𝗘 😁", url="https://t.me/HIDDEN_OFFICIALS_5/3")
             ],[
             InlineKeyboardButton("𝐀𝐏𝐍𝐈 𝐊𝐀𝐊𝐒𝐇𝐀 𝗪𝗘𝗕𝗦𝗜𝗧𝗘 😱", url="https://yashyasag.github.io/tesetoss")
             ],[
