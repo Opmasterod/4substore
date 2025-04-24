@@ -157,7 +157,7 @@ async def start_command(client: Client, message: Message):
         # Notify user about auto-deletion
 
         # Schedule auto-deletion
-        asyncio.create_task(delete_files(codeflix_msgs, client))
+        asyncio.create_task(delete_files(codeflix_msgs, client, k))
 # Notify user about auto-deletion
         return
     else:
@@ -271,6 +271,62 @@ async def send_text(client: Bot, message: Message):
 
     else:
         msg = await message.reply(f"Use This Command As A Reply To Any Telegram Message Without Any Spaces.")
+        await asyncio.sleep(8)
+        await msg.delete()
+
+@Bot.on_message(filters.private & filters.command('dbroadcast') & filters.user(ADMINS))
+async def delete_broadcast(client: Bot, message: Message):
+    if message.reply_to_message:
+        try:
+            duration = int(message.command[1])  # Get the duration in seconds
+        except (IndexError, ValueError):
+            await message.reply("<b>Please provide a valid duration in seconds.</b> Usage: /dbroadcast {duration}")
+            return
+
+        query = await full_userbase()
+        broadcast_msg = message.reply_to_message
+        total = 0
+        successful = 0
+        blocked = 0
+        deleted = 0
+        unsuccessful = 0
+
+        pls_wait = await message.reply("<i>Broadcast with auto-delete processing....</i>")
+        for chat_id in query:
+            try:
+                sent_msg = await broadcast_msg.copy(chat_id)
+                await asyncio.sleep(duration)  # Wait for the specified duration
+                await sent_msg.delete()  # Delete the message after the duration
+                successful += 1
+            except FloodWait as e:
+                await asyncio.sleep(e.x)
+                sent_msg = await broadcast_msg.copy(chat_id)
+                await asyncio.sleep(duration)
+                await sent_msg.delete()
+                successful += 1
+            except UserIsBlocked:
+                await del_user(chat_id)
+                blocked += 1
+            except InputUserDeactivated:
+                await del_user(chat_id)
+                deleted += 1
+            except:
+                unsuccessful += 1
+                pass
+            total += 1
+
+        status = f"""<b><u>Broadcast with Auto-Delete...</u>
+
+Total Users: <code>{total}</code>
+Successful: <code>{successful}</code>
+Blocked Users: <code>{blocked}</code>
+Deleted Accounts: <code>{deleted}</code>
+Unsuccessful: <code>{unsuccessful}</code></b>"""
+
+        return await pls_wait.edit(status)
+
+    else:
+        msg = await message.reply("Please reply to a message to broadcast it with auto-delete.")
         await asyncio.sleep(8)
         await msg.delete()
 
