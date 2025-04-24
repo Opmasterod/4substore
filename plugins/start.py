@@ -81,12 +81,44 @@ async def start_command(client: Client, message: Message):
                 print(f"Failed to send message: {e}")
                 pass
 
-        k = await client.send_message(chat_id=message.from_user.id, 
-                                      text=f"<b><i>This Lectures,Pdfs are deleting automatically in {file_auto_delete}.\n If delete you able to access using our Website/Bots😍</i>\n\n𝗜𝗳 𝘆𝗼𝘂 𝗼𝗽𝗲𝗻𝗲𝗱 𝗠𝗜𝗧 𝗦𝗖𝗛𝗢𝗢𝗟 𝗟𝗘𝗖𝗧𝗨𝗥𝗘𝗦 𝗦𝗼 𝗟𝗲𝗰𝘁𝘂𝗿𝗲𝘀 𝗗𝗲𝗹𝗲𝘁𝗲 𝗮𝗳𝘁𝗲𝗿 {file_auto_delete} aur delete hone ke baad wapas website se link open karke access kar sakte ho 𝐓𝐨𝐡 𝐃𝐞𝐥𝐞𝐭𝐞 𝐡𝐨 𝐮𝐬𝐤𝐞 𝐩𝐞𝐡𝐥𝐞 𝐩𝐚𝐝𝐡 𝐥𝐨 ☠️🙏")
+        k = await client.send_message(
+            chat_id=message.from_user.id,
+            text=f"<b>𝗕𝘂𝗱𝗱𝘆 𝘆𝗼𝘂𝗿 𝗿𝗲𝗾𝘂𝗲𝘀𝘁𝗲𝗱 𝗺𝗮𝘁𝗲𝗿𝗶𝗮𝗹 𝗴𝗼𝗻𝗲 𝗱𝗲𝗹𝗲𝘁𝗲 😕 𝗶𝗻 {file_auto_delete}</b>\n\n"
+                 f"<b>But Don,t worry 🥰 you again access through my websites 🌟</b>\n\n"
+                 f"<b>𝗔𝗹𝗹 𝗖𝗿𝗲𝗱𝗶𝘁𝘀 𝗳𝗼𝗿 𝘁𝗵𝗶𝘀 𝗺𝗮𝘁𝗲𝗿𝗶𝗮𝗹 𝗴𝗼𝗲𝘀 𝘁𝗼 ℍ𝔸ℂ𝕂ℍ𝔼𝕀𝕊𝕋 😈</b>",
+        )
 
-        # Schedule the file deletion
-        asyncio.create_task(delete_files(codeflix_msgs, client, k))
+        # Include notification message in the deletion list
+        codeflix_msgs.append(k)
 
+
+        # List of multiple special message IDs
+        special_msg_ids = [44219, 44224, 44225, 44226, 44227, 44228, 44229, 44230, 44231, 44232, 44234, 44235, 44237, 44238, 44240, 44242, 44243, 44244, 44245, 44247, 44248, 44249, 44250, 44251, 44253, 44254, 44255, 44256, 44257, 44258, 44259, 44260, 44261, 44262, 44263, 44264, 44265, 44266, 44267, 44268]  # Replace with actual message IDs
+
+# Select a random message ID from the list
+        random_msg_id = random.choice(special_msg_ids)
+
+        try:
+            special_msg = await client.get_messages(client.db_channel.id, random_msg_id)
+
+            if not special_msg:
+                await client.send_message(chat_id=message.from_user.id, text="⚠️ Special message not found!")
+            else:
+                if special_msg.sticker:
+                    special_copied_msg = await client.send_sticker(
+                        chat_id=message.from_user.id,
+                        sticker=special_msg.sticker.file_id
+                    )
+                else:
+                    await client.send_message(chat_id=message.from_user.id, text="⚠️ Unsupported message type!")
+        except Exception as e:
+            await client.send_message(chat_id=message.from_user.id, text=f"Error: {str(e)}")
+            print(f"Failed to fetch special message: {e}")
+        # Notify user about auto-deletion
+
+        # Schedule auto-deletion
+        asyncio.create_task(delete_files(codeflix_msgs, client))
+# Notify user about auto-deletion
         return
     else:
         reply_markup = InlineKeyboardMarkup(
@@ -95,38 +127,41 @@ async def start_command(client: Client, message: Message):
             ],[
             InlineKeyboardButton("𝐀𝐏𝐍𝐈 𝐊𝐀𝐊𝐒𝐇𝐀 𝗪𝗘𝗕𝗦𝗜𝗧𝗘 😱", url="https://yashyasag.github.io/tesetoss")
             ],[
-            InlineKeyboardButton("VISHESH BATCH", url="https://yashyasag.github.io/kuchnew/"),
-            InlineKeyboardButton("VIJETA BATCH", url="https://hiddop.github.io/12thies/")
+            InlineKeyboardButton("MIT SCHOOL 😁", url="https://mits-ak.github.io/mitbyhh/")
             ]]
         )
         await message.reply_text(
-            text=START_MSG.format(
-                first=message.from_user.first_name,
-                last=message.from_user.last_name,
-                username=None if not message.from_user.username else '@' + message.from_user.username,
-                mention=message.from_user.mention,
-                id=message.from_user.id
+            text = START_MSG.format(
+                first = message.from_user.first_name,
+                last = message.from_user.last_name,
+                username = None if not message.from_user.username else '@' + message.from_user.username,
+                mention = message.from_user.mention,
+                id = message.from_user.id
             ),
-            reply_markup=reply_markup,
-            disable_web_page_preview=True,
-            quote=True
+            reply_markup = reply_markup,
+            disable_web_page_preview = True,
+            quote = True
         )
-        return
+        return   
+
 
 @Bot.on_message(filters.command('start') & filters.private)
 async def not_joined(client: Client, message: Message):
     buttons = [
         [
-            InlineKeyboardButton(text="ᴊᴏɪɴ ᴄʜᴀɴɴᴇʟ", url=client.invitelink),
-            InlineKeyboardButton(text="ᴊᴏɪɴ ᴄʜᴀɴɴᴇʟ", url=client.invitelink2),
+            InlineKeyboardButton(text="1st Channel", url=client.invitelink2),
+            InlineKeyboardButton(text="2nd Channel", url=client.invitelink3),
+        ],
+        [
+            InlineKeyboardButton(text="3rd channel", url=client.invitelink),
         ]
     ]
     try:
         buttons.append(
             [
                 InlineKeyboardButton(
-                    text='ʀᴇʟᴏᴀᴅ',
-                    url=f"https://t.me/{client.username}?start={message.command[1]}"
+                    text = '• ɴᴏᴡ ᴄʟɪᴄᴋ ʜᴇʀᴇ •',
+                    url = f"https://t.me/{client.username}?start={message.command[1]}"
                 )
             ]
         )
@@ -134,16 +169,16 @@ async def not_joined(client: Client, message: Message):
         pass
 
     await message.reply(
-        text=FORCE_MSG.format(
-            first=message.from_user.first_name,
-            last=message.from_user.last_name,
-            username=None if not message.from_user.username else '@' + message.from_user.username,
-            mention=message.from_user.mention,
-            id=message.from_user.id
-        ),
-        reply_markup=InlineKeyboardMarkup(buttons),
-        quote=True,
-        disable_web_page_preview=True
+        text = FORCE_MSG.format(
+                first = message.from_user.first_name,
+                last = message.from_user.last_name,
+                username = None if not message.from_user.username else '@' + message.from_user.username,
+                mention = message.from_user.mention,
+                id = message.from_user.id
+            ),
+        reply_markup = InlineKeyboardMarkup(buttons),
+        quote = True,
+        disable_web_page_preview = True
     )
 
 @Bot.on_message(filters.command('users') & filters.private & filters.user(ADMINS))
