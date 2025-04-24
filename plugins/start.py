@@ -228,60 +228,68 @@ async def get_users(client: Bot, message: Message):
     await msg.edit(f"{len(users)} Users Are Using This Bot")
 
 @Bot.on_message(filters.private & filters.command('broadcast') & filters.user(ADMINS))
-async def delete_broadcast(client: Bot, message: Message):
-    if message.reply_to_message:
-        try:
-            duration = int(message.command[1])  # Get the duration in seconds
-        except (IndexError, ValueError):
-            await message.reply("<b>Please provide a valid duration in seconds.</b> Usage: /broadcast {duration}")
-            return
-
-        query = await full_userbase()
-        broadcast_msg = message.reply_to_message
-        total = 0
-        successful = 0
-        blocked = 0
-        deleted = 0
-        unsuccessful = 0
-
-        pls_wait = await message.reply("<i>Broadcast with auto-delete processing....</i>")
-        for chat_id in query:
-            try:
-                sent_msg = await broadcast_msg.copy(chat_id)
-                await asyncio.sleep(duration)  # Wait for the specified duration
-                await sent_msg.delete()  # Delete the message after the duration
-                successful += 1
-            except FloodWait as e:
-                await asyncio.sleep(e.x)
-                sent_msg = await broadcast_msg.copy(chat_id)
-                await asyncio.sleep(duration)
-                await sent_msg.delete()
-                successful += 1
-            except UserIsBlocked:
-                await del_user(chat_id)
-                blocked += 1
-            except InputUserDeactivated:
-                await del_user(chat_id)
-                deleted += 1
-            except:
-                unsuccessful += 1
-                pass
-            total += 1
-
-        status = f"""<b><u>Broadcast with Auto-Delete...</u>
-
-Total Users: <code>{total}</code>
-Successful: <code>{successful}</code>
-Blocked Users: <code>{blocked}</code>
-Deleted Accounts: <code>{deleted}</code>
-Unsuccessful: <code>{unsuccessful}</code></b>"""
-
-        return await pls_wait.edit(status)
-
-    else:
-        msg = await message.reply("Please reply to a message to broadcast it with auto-delete.")
+async def send_text(client: Bot, message: Message):
+    if not message.reply_to_message:
+        msg = await message.reply("Reply to a message to broadcast it.")
         await asyncio.sleep(8)
-        await msg.delete()
+        return await msg.delete()
+
+    # Extract seconds from command if provided
+    try:
+        seconds = int(message.text.split(maxsplit=1)[1])
+    except (IndexError, ValueError):
+        seconds = None  # No auto-delete if not provided
+
+    query = await full_userbase()
+    broadcast_msg = message.reply_to_message
+    total = 0
+    successful = 0
+    blocked = 0
+    deleted = 0
+    unsuccessful = 0
+    sent_messages = []  # To store (chat_id, message_id)
+
+    pls_wait = await message.reply("<i>ʙʀᴏᴀᴅᴄᴀꜱᴛ ᴘʀᴏᴄᴇꜱꜱɪɴɢ ᴛɪʟʟ ᴡᴀɪᴛ ʙʀᴏᴏ... </i>")
+
+    for chat_id in query:
+        try:
+            sent = await broadcast_msg.copy(chat_id)
+            sent_messages.append((chat_id, sent.id))
+            successful += 1
+        except FloodWait as e:
+            await asyncio.sleep(e.x)
+            sent = await broadcast_msg.copy(chat_id)
+            sent_messages.append((chat_id, sent.id))
+            successful += 1
+        except UserIsBlocked:
+            await del_user(chat_id)
+            blocked += 1
+        except InputUserDeactivated:
+            await del_user(chat_id)
+            deleted += 1
+        except:
+            unsuccessful += 1
+            pass
+        total += 1
+
+    status = f"""<b><u>ʙʀᴏᴀᴅᴄᴀꜱᴛ ᴄᴏᴍᴘʟᴇᴛᴇᴅ</u>
+
+ᴛᴏᴛᴀʟ ᴜꜱᴇʀꜱ: <code>{total}</code>
+ꜱᴜᴄᴄᴇꜱꜱꜰᴜʟ: <code>{successful}</code>
+ʙʟᴏᴄᴋᴇᴅ ᴜꜱᴇʀꜱ: <code>{blocked}</code>
+ᴅᴇʟᴇᴛᴇᴅ ᴀᴄᴄᴏᴜɴᴛꜱ: <code>{deleted}</code>
+ᴜɴꜱᴜᴄᴄᴇꜱꜱꜰᴜʟ: <code>{unsuccessful}</code></b>"""
+
+    await pls_wait.edit(status)
+
+    # Schedule deletion after given seconds if specified
+    if seconds:
+        await asyncio.sleep(seconds)
+        for chat_id, msg_id in sent_messages:
+            try:
+                await client.delete_messages(chat_id, msg_id)
+            except:
+                pass
 
 
 @Bot.on_message(filters.private & filters.command('dbroadcast') & filters.user(ADMINS))
