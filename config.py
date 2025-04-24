@@ -22,7 +22,7 @@ API_HASH = os.environ.get("API_HASH", "2daa157943cb2d76d149c4de0b036a99")
 CHANNEL_ID = int(os.environ.get("CHANNEL_ID", "-1001995978690"))
 
 # NAMA OWNER
-OWNER = os.environ.get("OWNER", "real_hackheist")
+OWNER = os.environ.get("OWNER", "ll_HACKHEIST_ll")
 
 #OWNER ID
 OWNER_ID = int(os.environ.get("OWNER_ID", "5487643307"))
@@ -37,13 +37,14 @@ DB_NAME = os.environ.get("DATABASE_NAME", "Cluster0")
 #force sub channel id, if you want enable force sub
 FORCE_SUB_CHANNEL = int(os.environ.get("FORCE_SUB_CHANNEL", "-1001473043276"))
 FORCE_SUB_CHANNEL2 = int(os.environ.get("FORCE_SUB_CHANNEL2", "-1001644866777"))
+FORCE_SUB_CHANNEL3 = int(os.environ.get("FORCE_SUB_CHANNEL", "-1001473043276"))
 
 TG_BOT_WORKERS = int(os.environ.get("TG_BOT_WORKERS", "4"))
 
-FILE_AUTO_DELETE = int(os.getenv("FILE_AUTO_DELETE", "31536000")) # auto delete in seconds
+FILE_AUTO_DELETE = int(os.getenv("FILE_AUTO_DELETE", "36000")) # auto delete in seconds
 
 #start message
-START_MSG = os.environ.get("START_MESSAGE", "<b>ʙᴀᴋᴋᴀᴀᴀ!! {first}\n\n ɪ ᴀᴍ ғɪʟᴇ sᴛᴏʀᴇ ʙᴏᴛ, ɪ ᴄᴀɴ sᴛᴏʀᴇ ᴘʀɪᴠᴀᴛᴇ ғɪʟᴇs ɪɴ sᴘᴇᴄɪғɪᴇᴅ ᴄʜᴀɴɴᴇʟ ᴀɴᴅ ᴏᴛʜᴇʀ ᴜsᴇʀs ᴄᴀɴ ᴀᴄᴄᴇss ɪᴛ ғʀᴏᴍ sᴘᴇᴄɪᴀʟ ʟɪɴᴋ.</b>")
+START_MSG = os.environ.get("START_MESSAGE", "Hey , {first}\n\nThanks to come here ❤️\n\nI am HACKHEIST helper to help in stuidies if you are serious aspriant then you are on right place 👍\n\n<b>Credit - @HIDDEN_OFFICIALS_5</b>")
 try:
     ADMINS=[6376328008]
     for x in (os.environ.get("ADMINS", "").split()):
@@ -52,10 +53,10 @@ except ValueError:
         raise Exception("Your Admins list does not contain valid integers.")
 
 #Force sub message 
-FORCE_MSG = os.environ.get("FORCE_SUB_MESSAGE", "<b>ʜᴇʟʟᴏ {first}\nsᴏʀʀʏ ʙᴜᴅᴅʏ 🙏\nʏᴏᴜ ʜᴀᴠᴇ ᴛᴏ ᴊᴏɪɴ ᴏᴜʀ 𝐍𝐄𝐖 𝐂𝐡𝐚𝐧𝐧𝐞𝐥𝐬 ᴛʜᴇɴ ᴄʟɪᴄᴋ ᴏɴ ʙᴇʟᴏᴡ ʀᴇʟᴏᴀᴅ ʙᴜᴛᴛᴏɴ ᴛᴏ ɢᴇᴛ ʏᴏᴜʀ 𝗥𝗲𝗾𝘂𝗲𝘀𝘁𝗲𝗱 𝗠𝗮𝘁𝗲𝗿𝗶𝗮𝗹.\nAnd thanks to use our bot 🥰</b>")
+FORCE_MSG = os.environ.get("FORCE_SUB_MESSAGE", "<b>Hey , {first}\n\n<b>Bro/Sister first of all you have to join our 3 channels using below buttons click on button join channels one by one and then click on NOW CLICK HERE button</b>\n\nYou have to do it only 1 time 😍 \n\nAny problem - @HACKHEISTBOT</b>")
 
 #set your Custom Caption here, Keep None for Disable Custom Caption
-CUSTOM_CAPTION = os.environ.get("CUSTOM_CAPTION", "")
+CUSTOM_CAPTION = os.environ.get("CUSTOM_CAPTION", """<b>{previouscaption}</b>\n<b>━━━━━━━━━━━━━━━━━◇</b>\n<b>⛧ 🄱🅈 :-) </b><b><a href="https://yashyasag.github.io/hiddens">ℍ𝔸ℂ𝕂ℍ𝔼𝕀𝕊𝕋 😈</a></b> <b>♛</b>\n<b>━━━━━━━━━━━━━━━━━◇</b>\n<b>🙏 sʜᴀʀᴇ ᴀɴᴅ sᴜᴘᴘᴏʀᴛ ᴜs 👇</b>\n<b>—————————————————</b>\n<b><a href="https://yashyasag.github.io/hiddens">🚀 𝗠𝗢𝗥𝗘 𝗪𝗘𝗕𝗦𝗜𝗧𝗘𝗦 🌟</a></b>\n<b>—————————————————</b>""")
 
 #set True if you want to prevent users from forwarding files from bot
 PROTECT_CONTENT = True if os.environ.get('PROTECT_CONTENT', "False") == "True" else False
