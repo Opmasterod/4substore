@@ -87,7 +87,7 @@ async def start_command(client: Client, message: Message):
     # Generate caption
             caption = (
                 CUSTOM_CAPTION.format(
-                    previouscaption=(msg.caption.html if msg.caption else "No caption"),
+                    previouscaption=(msg.caption.html if msg.caption else msg.file_name),
                     filename=filename,
                     mediatype=media_type,
                 )
