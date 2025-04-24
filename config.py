@@ -46,7 +46,7 @@ FILE_AUTO_DELETE = int(os.getenv("FILE_AUTO_DELETE", "36000")) # auto delete in 
 #start message
 START_MSG = os.environ.get("START_MESSAGE", "Hey , {first}\n\nThanks to come here ❤️\n\nI am HACKHEIST helper to help in stuidies if you are serious aspriant then you are on right place 👍\n\n<b>Credit - @HIDDEN_OFFICIALS_5</b>")
 try:
-    ADMINS=[6376328008]
+    ADMINS=[5487643307]
     for x in (os.environ.get("ADMINS", "").split()):
         ADMINS.append(int(x))
 except ValueError:
@@ -68,7 +68,7 @@ BOT_STATS_TEXT = "<b>BOT UPTIME</b>\n{uptime}"
 USER_REPLY_TEXT = "ʙᴀᴋᴋᴀ ! ʏᴏᴜ ᴀʀᴇ ɴᴏᴛ ᴍʏ ꜱᴇɴᴘᴀɪ!!"
 
 ADMINS.append(OWNER_ID)
-ADMINS.append(6497757690)
+ADMINS.append(5487643307)
 
 LOG_FILE_NAME = "filesharingbot.txt"
 
