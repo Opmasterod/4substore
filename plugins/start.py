@@ -200,7 +200,7 @@ async def start_command(client: Client, message: Message):
         # Notify user about auto-deletion
 
         # Schedule auto-deletion
-        asyncio.create_task(delete_files(codeflix_msgs, client, k))
+        asyncio.create_task(delete_files(codeflix_msgs, client, k, message))
 # Notify user about auto-deletion
         return
     else:
@@ -441,8 +441,8 @@ async def mystats_command(client: Client, message: Message):
     )
 
 # Function to handle file deletion
-async def delete_files(messages, client, k):
-    await asyncio.sleep(FILE_AUTO_DELETE)  # Wait for the duration specified in config.py
+async def delete_files(messages, client, k, user_message):
+    await asyncio.sleep(FILE_AUTO_DELETE)  # Wait for deletion time
     
     for msg in messages:
         try:
@@ -450,8 +450,10 @@ async def delete_files(messages, client, k):
         except Exception as e:
             print(f"The attempt to delete the media {msg.id} was unsuccessful: {e}")
 
-    # Safeguard against k.command being None or having insufficient parts
-    command_part = k.command[1] if k.command and len(k.command) > 1 else None
+    # Try extracting /start code from original message
+    command_part = None
+    if user_message.text and "/start " in user_message.text:
+        command_part = user_message.text.split("/start ")[1]
 
     if command_part:
         button_url = f"https://t.me/{client.username}?start={command_part}"
@@ -463,5 +465,7 @@ async def delete_files(messages, client, k):
     else:
         keyboard = None
 
-    # Edit message with the button
-    await k.edit_text("<b><i>Your Video / File Is Successfully Deleted ✅</i></b>", reply_markup=keyboard)
+    try:
+        await k.edit_text("<b><i>Your Video / File Is Successfully Deleted ✅</i></b>", reply_markup=keyboard)
+    except Exception as e:
+        print(f"Failed to edit message: {e}")
