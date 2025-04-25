@@ -32,11 +32,17 @@ async def start_command(client: Client, message: Message):
 
         string = await decode(base64_string)
 
-        # Rbatch authorization check
+        # Rbatch access check from MongoDB
         if string.startswith("rbatch-"):
-            if id not in ADMINS and id not in ALLOWED_USERS:
-                await message.reply("❌ You are not authorized to access this private batch link.")
-                return
+            if id not in ADMINS:
+                user_data = access_collection.find_one({"user_id": id})
+                if not user_data:
+                    return await message.reply("❌ You are not authorized to access this rbatch link. Ask the admin to add you.")
+
+                now = datetime.utcnow()
+                if now > user_data["expires_at"]:
+                    return await message.reply("⛔ Your access has expired. Ask the admin to renew it.")
+
 
         argument = string.split("-")
         
