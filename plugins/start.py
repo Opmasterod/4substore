@@ -50,7 +50,9 @@ async def start_command(client: Client, message: Message):
                 "joined_at": datetime.utcnow()
             })
 
-            count = await mongo_db.refer_collection.count_documents({"referred_by": referrer_id})
+            # Corrected version
+            count = mongo_db.refer_collection.count_documents({"referred_by": user_id})
+
 
             # Optional: You can store how many needed if you want with another collection
 
@@ -407,7 +409,7 @@ async def referal_command(client: Client, message: Message):
     referral_link = f"https://t.me/{client.username}?start={base64_id}"
 
     # Count referrals
-    count = await mongo_db.refer_collection.count_documents({"referred_by": user_id})
+    count = mongo_db.refer_collection.count_documents({"referred_by": user_id})
 
     await message.reply_text(
         f"🔗 Your Referral Link:\n<code>{referral_link}</code>\n\n"
