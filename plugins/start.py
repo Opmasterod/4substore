@@ -23,7 +23,7 @@ async def start_command(client: Client, message: Message):
         except Exception as e:
             print(f"Error adding user: {e}")
             pass
-    
+
     text = message.text
     if len(text) > 7:
         try:
@@ -32,6 +32,44 @@ async def start_command(client: Client, message: Message):
             return
 
         string = await decode(base64_string)
+
+        # ========== Referral tracking logic ==========
+        if string.count("-") == 2:
+            code, total_str, referrer_id_str = string.split("-")
+            try:
+                total = int(total_str)
+                referrer_id = int(referrer_id_str)
+            except:
+                return await message.reply("Invalid referral link.")
+
+            if id == referrer_id:
+                return await message.reply("You cannot refer yourself!")
+
+            already = await db.refer_collection.find_one({"user_id": id})
+            if already:
+                return await message.reply("You are already registered via a referral.")
+
+            # Save this referral
+            await db.refer_collection.insert_one({
+                "user_id": id,
+                "referred_by": referrer_id,
+                "joined_at": datetime.utcnow()
+            })
+
+            # Count valid referrals (users who also passed @subscribed filter)
+            referral_count = await db.refer_collection.count_documents({"referred_by": referrer_id})
+
+            if referral_count >= total:
+                await client.send_message(
+                    client.db_channel.id,
+                    f"Referral Completed!\n\n"
+                    f"User ID: <code>{referrer_id}</code>\n"
+                    f"Total Referrals Done: {referral_count}"
+                )
+
+            await message.reply("✅ You’ve been registered via referral!")
+            return
+        # ============================================
 
         # Rbatch access check from MongoDB
         if string.startswith("rbatch-"):
@@ -44,9 +82,7 @@ async def start_command(client: Client, message: Message):
                 if now > user_data["expires_at"]:
                     return await message.reply("⛔ Your access has expired. Ask the admin to renew it.")
 
-
         argument = string.split("-")
-        
         ids = []
         if len(argument) == 3:
             try:
@@ -56,7 +92,6 @@ async def start_command(client: Client, message: Message):
             except Exception as e:
                 print(f"Error decoding IDs: {e}")
                 return
-
         elif len(argument) == 2:
             try:
                 ids = [int(int(argument[1]) / abs(client.db_channel.id))]
@@ -75,7 +110,6 @@ async def start_command(client: Client, message: Message):
             await temp_msg.delete()
 
         codeflix_msgs = []
-
         for msg in messages:
             filename = "Unknown"
             media_type = "Unknown"
@@ -92,6 +126,7 @@ async def start_command(client: Client, message: Message):
             elif msg.text:
                 media_type = "Text"
                 filename = "Text Content"
+
 
     # Generate caption
             caption = (
@@ -365,6 +400,38 @@ async def list_users_cmd(client: Bot, message: Message):
         msg += f"• <code>{uid}</code>\n  Joined: {joined}\n  Expires: {expires}\n\n"
 
     await message.reply_text(msg, parse_mode="html")
+
+
+@Client.on_message(filters.command("referal") & filters.private)
+async def create_referral(client: Client, message: Message):
+    if message.from_user.id not in ADMINS:
+        return await message.reply("❌ Not authorized")
+
+    args = message.text.split()
+    if len(args) != 3:
+        return await message.reply("Usage:\n/referal <6digitcode> <total_referrals>")
+
+    code = args[1]
+    try:
+        total = int(args[2])
+    except:
+        return await message.reply("Referral count must be a number.")
+
+    referral_collection.update_one(
+        {"code": code},
+        {"$set": {
+            "code": code,
+            "target": total,
+            "creator": message.from_user.id
+        }},
+        upsert=True
+    )
+
+    username = (await client.get_me()).username
+    await message.reply(
+        f"Referral link:\nhttps://t.me/{username}?start={code}-{total}"
+    )
+
 
 # Function to handle file deletion
 async def delete_files(messages, client, k):
