@@ -432,7 +432,7 @@ async def mystats_command(client: Client, message: Message):
     except:
         return await message.reply("Invalid user ID.", quote=True)
 
-    referral_count = await db.refer_collection.count_documents({"referred_by": user_id})
+    referral_count = db.refer_collection.count_documents({"referred_by": user_id})
 
     await message.reply(
         f"📊 <b>Referral Stats</b>\n\n"
