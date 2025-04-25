@@ -39,7 +39,7 @@ async def start_command(client: Client, message: Message):
             if id == referrer_id:
                 return await message.reply("❌ You cannot refer yourself.")
             
-            already = await mongo_db.refer_collection.find_one({"user_id": id})
+            already = mongo_db.refer_collection.find_one({"user_id": id})
             if already:
                 return await message.reply("❌ You already joined via referral.")
 
