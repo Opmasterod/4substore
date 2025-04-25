@@ -56,7 +56,7 @@ async def start_command(client: Client, message: Message):
 
             # Optional: You can store how many needed if you want with another collection
 
-            if count >= 10:
+            if count >= 1:
                 await client.send_message(
                     client.db_channel.id,
                     f"Referral Completed!\n\n"
