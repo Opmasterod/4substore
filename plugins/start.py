@@ -8,6 +8,7 @@ from bot import Bot
 from config import *
 from helper_func import subscribed, encode, decode, get_messages
 from database.database import add_user, del_user, full_userbase, present_user
+from datetime import datetime, timedelta
 
 codeflixbots = FILE_AUTO_DELETE
 subaru = codeflixbots
@@ -303,61 +304,67 @@ async def send_text(client: Bot, message: Message):
                 pass
 
 
-@Bot.on_message(filters.private & filters.command('dbroadcast') & filters.user(ADMINS))
-async def delete_broadcast(client: Bot, message: Message):
-    if message.reply_to_message:
-        try:
-            duration = int(message.command[1])  # Get the duration in seconds
-        except (IndexError, ValueError):
-            await message.reply("<b>Please provide a valid duration in seconds.</b> Usage: /dbroadcast {duration}")
-            return
+@Bot.on_message(filters.command("adduser") & filters.private & filters.user(ADMINS))
+async def add_user_cmd(client: Bot, message: Message):
+    args = message.text.split()
+    if len(args) != 3:
+        return await message.reply("Usage:\n`/adduser <user_id> <minutes>`", quote=True)
+    
+    try:
+        user_id = int(args[1])
+        minutes = int(args[2])
+    except ValueError:
+        return await message.reply("User ID and minutes must be numbers.")
 
-        query = await full_userbase()
-        broadcast_msg = message.reply_to_message
-        total = 0
-        successful = 0
-        blocked = 0
-        deleted = 0
-        unsuccessful = 0
+    now = datetime.utcnow()
+    expiry = now + timedelta(minutes=minutes)
 
-        pls_wait = await message.reply("<i>Broadcast with auto-delete processing....</i>")
-        for chat_id in query:
-            try:
-                sent_msg = await broadcast_msg.copy(chat_id)
-                await asyncio.sleep(duration)  # Wait for the specified duration
-                await sent_msg.delete()  # Delete the message after the duration
-                successful += 1
-            except FloodWait as e:
-                await asyncio.sleep(e.x)
-                sent_msg = await broadcast_msg.copy(chat_id)
-                await asyncio.sleep(duration)
-                await sent_msg.delete()
-                successful += 1
-            except UserIsBlocked:
-                await del_user(chat_id)
-                blocked += 1
-            except InputUserDeactivated:
-                await del_user(chat_id)
-                deleted += 1
-            except:
-                unsuccessful += 1
-                pass
-            total += 1
+    access_collection.update_one(
+        {"user_id": user_id},
+        {"$set": {
+            "user_id": user_id,
+            "joined_at": now,
+            "expires_at": expiry
+        }},
+        upsert=True
+    )
 
-        status = f"""<b><u>Broadcast with Auto-Delete...</u>
+    await message.reply(f"✅ User `{user_id}` added with access for `{minutes}` minutes.")
 
-Total Users: <code>{total}</code>
-Successful: <code>{successful}</code>
-Blocked Users: <code>{blocked}</code>
-Deleted Accounts: <code>{deleted}</code>
-Unsuccessful: <code>{unsuccessful}</code></b>"""
+# /removeuser <user_id>
+@Bot.on_message(filters.command("removeuser") & filters.private & filters.user(ADMINS))
+async def remove_user_cmd(client: Bot, message: Message):
+    args = message.text.split()
+    if len(args) != 2:
+        return await message.reply("Usage:\n`/removeuser <user_id>`", quote=True)
+    
+    try:
+        user_id = int(args[1])
+    except ValueError:
+        return await message.reply("User ID must be a number.")
 
-        return await pls_wait.edit(status)
+    result = access_collection.delete_one({"user_id": user_id})
 
+    if result.deleted_count:
+        await message.reply(f"✅ User `{user_id}` removed.")
     else:
-        msg = await message.reply("Please reply to a message to broadcast it with auto-delete.")
-        await asyncio.sleep(8)
-        await msg.delete()
+        await message.reply("❌ User not found.")
+
+# /listusers
+@Bot.on_message(filters.command("listusers") & filters.private & filters.user(ADMINS))
+async def list_users_cmd(client: Bot, message: Message):
+    users = access_collection.find()
+    if access_collection.count_documents({}) == 0:
+        return await message.reply("No users found.")
+
+    msg = "<b>Allowed Users:</b>\n\n"
+    for user in users:
+        uid = user["user_id"]
+        joined = user["joined_at"].strftime("%Y-%m-%d %H:%M")
+        expires = user["expires_at"].strftime("%Y-%m-%d %H:%M")
+        msg += f"• <code>{uid}</code>\n  Joined: {joined}\n  Expires: {expires}\n\n"
+
+    await message.reply_text(msg, parse_mode="html")
 
 # Function to handle file deletion
 async def delete_files(messages, client, k):
