@@ -31,6 +31,13 @@ async def start_command(client: Client, message: Message):
             return
 
         string = await decode(base64_string)
+
+        # Rbatch authorization check
+        if string.startswith("rbatch-"):
+            if id not in ADMINS and id not in ALLOWED_USERS:
+                await message.reply("❌ You are not authorized to access this private batch link.")
+                return
+
         argument = string.split("-")
         
         ids = []
@@ -60,14 +67,12 @@ async def start_command(client: Client, message: Message):
         finally:
             await temp_msg.delete()
 
-        codeflix_msgs = []  # List to keep track of sent messages
+        codeflix_msgs = []
 
         for msg in messages:
-            # Initialize filename and media_type with safe defaults
             filename = "Unknown"
             media_type = "Unknown"
 
-            # Determine the media type and filename
             if msg.video:
                 media_type = "Video"
                 filename = msg.video.file_name if msg.video.file_name else "Unnamed Video"
