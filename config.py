@@ -6,7 +6,7 @@
 import os
 import logging
 from logging.handlers import RotatingFileHandler
-
+from pymongo import MongoClient
 
 
 #Bot token @Botfather
@@ -33,6 +33,13 @@ PORT = os.environ.get("PORT", "8030")
 #Database
 DB_URI = os.environ.get("DATABASE_URL", "mongodb+srv://namanjain123eudhc:opmaster@cluster0.5iokvxo.mongodb.net/?retryWrites=true&w=majority")
 DB_NAME = os.environ.get("DATABASE_NAME", "Cluster0")
+
+mongo_client = MongoClient(DB_URI)
+mongo_db = mongo_client[DB_NAME]
+
+# Add this line for access control collection
+access_collection = mongo_db["access_users"]
+
 
 #force sub channel id, if you want enable force sub
 FORCESUB_CHANNEL = int(os.environ.get("FORCESUB_CHANNEL", "-1001473043276"))
