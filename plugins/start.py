@@ -417,6 +417,7 @@ async def create_referral(client: Client, message: Message):
     except:
         return await message.reply("Referral count must be a number.")
 
+    # Save in database
     referral_collection.update_one(
         {"code": code},
         {"$set": {
@@ -427,10 +428,12 @@ async def create_referral(client: Client, message: Message):
         upsert=True
     )
 
+    # Generate encoded referral link
+    encoded = await encode(f"referal-{code}-{total}")
     username = (await client.get_me()).username
-    await message.reply(
-        f"Referral link:\nhttps://t.me/{username}?start={code}-{total}"
-    )
+    link = f"https://t.me/{username}?start={encoded}"
+
+    await message.reply(f"Referral link:\n{link}")
 
 
 # Function to handle file deletion
