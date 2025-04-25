@@ -39,7 +39,8 @@ mongo_db = mongo_client[DB_NAME]
 
 # Add this line for access control collection
 access_collection = mongo_db["access_users"]
-
+referral_collection = db["referral_codes"]
+referral_map_collection = db["user_referral_map"]
 
 #force sub channel id, if you want enable force sub
 FORCESUB_CHANNEL = int(os.environ.get("FORCESUB_CHANNEL", "-1001473043276"))
