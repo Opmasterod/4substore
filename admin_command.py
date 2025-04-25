@@ -4,7 +4,7 @@ from datetime import datetime, timedelta
 from config import access_collection, ADMINS
 
 # /adduser <user_id> <minutes>
-@Client.on_message(filters.command("adduser") & filters.private & filters.user(ADMINS))
+@Bot.on_message(filters.command("adduser") & filters.private & filters.user(ADMINS))
 async def add_user_cmd(client: Client, message: Message):
     args = message.text.split()
     if len(args) != 3:
@@ -32,7 +32,7 @@ async def add_user_cmd(client: Client, message: Message):
     await message.reply(f"✅ User `{user_id}` added with access for `{minutes}` minutes.")
 
 # /removeuser <user_id>
-@Client.on_message(filters.command("removeuser") & filters.private & filters.user(ADMINS))
+@Bot.on_message(filters.command("removeuser") & filters.private & filters.user(ADMINS))
 async def remove_user_cmd(client: Client, message: Message):
     args = message.text.split()
     if len(args) != 2:
@@ -51,7 +51,7 @@ async def remove_user_cmd(client: Client, message: Message):
         await message.reply("❌ User not found.")
 
 # /listusers
-@Client.on_message(filters.command("listusers") & filters.private & filters.user(ADMINS))
+@Bot.on_message(filters.command("listusers") & filters.private & filters.user(ADMINS))
 async def list_users_cmd(client: Client, message: Message):
     users = access_collection.find()
     if access_collection.count_documents({}) == 0:
