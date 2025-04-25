@@ -421,7 +421,7 @@ async def referal_command(client: Client, message: Message):
 
 
 # Function to handle file deletion
-@Client.on_message(filters.command("mystats") & filters.private & filters.user(ADMINS))
+@Client.on_message(filters.command("mystats") & filters.private)
 async def mystats_command(client: Client, message: Message):
     args = message.text.split()
     if len(args) != 2:
