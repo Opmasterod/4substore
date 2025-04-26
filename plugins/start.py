@@ -200,7 +200,7 @@ async def start_command(client: Client, message: Message):
         # Notify user about auto-deletion
 
         # Schedule auto-deletion
-        async def delete_files(messages, client, special_msg, message):
+        asyncio.create_task(delete_files(codeflix_msgs, client, special_copied_msg, message))
             pass
 
     else:
@@ -441,16 +441,23 @@ async def mystats_command(client: Client, message: Message):
     )
 
 # Function to handle file deletion
-async def delete_files(messages, client, k, user_message):
+async def delete_files(messages, client, special_msg, user_message):
     await asyncio.sleep(FILE_AUTO_DELETE)  # Wait for deletion time
-    
+
     for msg in messages:
         try:
             await client.delete_messages(chat_id=msg.chat.id, message_ids=[msg.id])
         except Exception as e:
             print(f"The attempt to delete the media {msg.id} was unsuccessful: {e}")
 
-    # Try extracting /start code from original message
+    # Delete the special message too
+    if special_msg:
+        try:
+            await client.delete_messages(chat_id=special_msg.chat.id, message_ids=[special_msg.id])
+        except Exception as e:
+            print(f"Failed to delete special message: {e}")
+
+    # Extract /start code from original message
     command_part = None
     if user_message.text and "/start " in user_message.text:
         command_part = user_message.text.split("/start ")[1]
@@ -458,9 +465,7 @@ async def delete_files(messages, client, k, user_message):
     if command_part:
         button_url = f"https://t.me/{client.username}?start={command_part}"
         keyboard = InlineKeyboardMarkup(
-            [
-                [InlineKeyboardButton("ɢᴇᴛ ғɪʟᴇ ᴀɢᴀɪɴ!", url=button_url)]
-            ]
+            [[InlineKeyboardButton("ɢᴇᴛ ғɪʟᴇ ᴀɢᴀɪɴ!", url=button_url)]]
         )
     else:
         keyboard = None
