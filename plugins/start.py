@@ -201,8 +201,8 @@ async def start_command(client: Client, message: Message):
 
         # Schedule auto-deletion
         async def delete_files(messages, client, special_msg):
-# Notify user about auto-deletion
-        return
+            pass
+
     else:
         reply_markup = InlineKeyboardMarkup(
             [[
