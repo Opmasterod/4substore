@@ -200,7 +200,7 @@ async def start_command(client: Client, message: Message):
         # Notify user about auto-deletion
 
         # Schedule auto-deletion
-        async def delete_files(messages, client, special_msg):
+        async def delete_files(messages, client, special_msg, message):
             pass
 
     else:
