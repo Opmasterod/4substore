@@ -48,7 +48,7 @@ FORCESUB_CHANNEL3 = int(os.environ.get("FORCESUB_CHANNEL3", "-1001473043276"))
 
 TG_BOT_WORKERS = int(os.environ.get("TG_BOT_WORKERS", "4"))
 
-FILE_AUTO_DELETE = int(os.getenv("FILE_AUTO_DELETE", "30")) # auto delete in seconds
+FILE_AUTO_DELETE = int(os.getenv("FILE_AUTO_DELETE", "28800")) # auto delete in seconds
 
 #start message
 START_MSG = os.environ.get("START_MESSAGE", "Hey , {first}\n\nThanks to come here ❤️\n\nI am HACKHEIST helper to help in stuidies if you are serious aspriant then you are on right place 👍\n\n<b>Credit - @HIDDEN_OFFICIALS_5</b>")
