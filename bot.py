@@ -52,15 +52,13 @@ class Bot(Client):
             self.LOGGER(__name__).info("\nBot Stopped. Join https://t.me/weebs_support for support")
             sys.exit()
 
-        # Load additional database and force-sub channels (e.g., from database or config)
-        # Note: Actual loading depends on your database implementation
-        # For now, we'll assume they're set via commands in the main bot code
+        # Load additional database and force-sub channels
         self.db_channel_ids = getattr(self, 'db_channel_ids', [CHANNEL_ID])
         self.force_sub_ids = getattr(self, 'force_sub_ids', [])
         self.force_sub_links = getattr(self, 'force_sub_links', {})
 
         # Validate and generate invite links for force-sub channels
-        for channel_id in self.force_sub_ids:
+        for channel_id in self.force_sub_ids[:]:  # Copy to avoid modifying during iteration
             try:
                 link = (await self.get_chat(channel_id)).invite_link
                 if not link:
@@ -74,7 +72,7 @@ class Bot(Client):
                 self.force_sub_links.pop(channel_id, None)
 
         # Validate additional database channels
-        for channel_id in self.db_channel_ids:
+        for channel_id in self.db_channel_ids[:]:  # Copy to avoid modifying during iteration
             if channel_id == CHANNEL_ID:
                 continue  # Already validated
             try:
