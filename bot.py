@@ -60,7 +60,7 @@ class Bot(Client):
         self.force_sub_links = getattr(self, 'force_sub_links', {})
 
         # Validate and generate invite links for force-sub channels
-        # Line ~70
+        # Line 71
         for channel_id in self.force_sub_ids[:]:  # Copy to avoid modifying during iteration
             try:
                 link = (await self.get_chat(channel_id)).invite_link
