@@ -234,11 +234,10 @@ async def start_command(client: Client, message: Message):
 
         codeflix_msgs.append(k)
 
-        # Fixed syntax error in special_msg_ids (removed |)
         special_msg_ids = [
-            44219, 44224, 44225, 44226, 44227, 44228, 44229, 44230, 44231, 44232, 
-            44234, 44235, 44237, 44238, 44240, 44242, 44243, 44244, 44245, 44247, 
-            44248, 44249, 44250, 44251, 44253, 44254, 44255, 44256, 44257, 44258, 
+            44219, 44224, 44225, 44226, 44227, 44228, 44229, 44230, 44231, 44232,
+            44234, 44235, 44237, 44238, 44240, 44242, 44243, 44244, 44245, 44247,
+            44248, 44249, 44250, 44251, 44253, 44254, 44255, 44256, 44257, 44258,
             44259, 44260, 44261, 44262, 44263, 44264, 44265, 44266, 44267, 44268
         ]
 
@@ -291,7 +290,6 @@ async def not_joined(client: Client, message: Message):
     force_sub_ids = getattr(client, 'force_sub_ids', [])
     
     if not force_sub_ids:
-        # Fallback to default message if no force-sub channels
         await message.reply(
             text=FORCE_MSG.format(
                 first=message.from_user.first_name,
@@ -305,7 +303,6 @@ async def not_joined(client: Client, message: Message):
         )
         return
     
-    # Generate buttons dynamically (two per row)
     for i in range(0, len(force_sub_ids), 2):
         row = []
         for j in range(2):
@@ -319,7 +316,6 @@ async def not_joined(client: Client, message: Message):
                 )
         buttons.append(row)
     
-    # Add "Now try again" button
     try:
         buttons.append(
             [
