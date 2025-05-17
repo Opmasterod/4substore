@@ -1,4 +1,4 @@
-#(©)Codeflix_Bots
+#(©)CodeFlix_Bots
 
 import random
 import os
@@ -6,16 +6,16 @@ import asyncio
 import humanize
 from pyrogram import Client, filters, __version__
 from pyrogram.enums import ParseMode
-from pyrogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton, CallbackQuery
+from pyrogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton
 from pyrogram.errors import FloodWait, UserIsBlocked, InputUserDeactivated
-from config import FILE_AUTO_DELETE, ADMINS, FORCE_MSG, START_MSG, CUSTOM_CAPTION, DISABLE_CHANNEL_BUTTON, PROTECT_CONTENT
+from config import FILE_AUTO_DELETE, ADMINS, FORCE_MSG, START_MSG, CUSTOM_CAPTION, DISABLE_CHANNEL_BUTTON, PROTECT_CONTENT, CHANNEL_ID
 from helper_func import subscribed, encode, decode, get_messages, get_invite_link
 from database.database import add_user, del_user, full_userbase, present_user
 
 # Initialize lists for database and force-sub channels
-DB_CHANNEL_IDS = []
+DB_CHANNEL_IDS = [CHANNEL_ID]  # Initialize with default channel
 FORCE_SUB_IDS = []
-FORCE_SUB_LINKS = {}  # Dictionary to store channel ID -> invite link mapping
+FORCE_SUB_LINKS = {}  # Dictionary to store channel ID -> invite link
 
 codeflixbots = FILE_AUTO_DELETE
 subaru = codeflixbots
@@ -70,7 +70,6 @@ async def add_force_sub(client: Client, message: Message):
                 await message.reply(f"Invalid channel ID: {channel_id}. Channel IDs must start with -100.")
                 continue
             channel_id = int(channel_id)
-            # Verify bot has access and get invite link
             invite_link = await get_invite_link(client, channel_id)
             if not invite_link:
                 await message.reply(f"Could not get invite link for channel {channel_id}. Ensure the bot is an admin.")
@@ -83,9 +82,10 @@ async def add_force_sub(client: Client, message: Message):
             await message.reply(f"Error accessing channel {channel_id}: {str(e)}")
     
     if valid_ids:
-        global FORCE_SUB_IDS
+        global FORCE_SUB_IDS, FORCE_SUB_LINKS
         FORCE_SUB_IDS.extend([id for id in valid_ids if id not in FORCE_SUB_IDS])
         client.force_sub_ids = FORCE_SUB_IDS
+        client.force_sub_links = FORCE_SUB_LINKS
         await message.reply(f"Added {len(valid_ids)} force-sub channel(s): {', '.join(str(id) for id in valid_ids)}\nCurrent force-sub channels: {', '.join(str(id) for id in FORCE_SUB_IDS)}")
     else:
         await message.reply("No valid channel IDs were added.")
@@ -111,6 +111,7 @@ async def remove_force_sub(client: Client, message: Message):
             FORCE_SUB_IDS.remove(channel_id)
             FORCE_SUB_LINKS.pop(channel_id, None)
             client.force_sub_ids = FORCE_SUB_IDS
+            client.force_sub_links = FORCE_SUB_LINKS
             await message.reply(f"Removed force-sub channel {channel_id}.\nCurrent force-sub channels: {', '.join(str(id) for id in FORCE_SUB_IDS) or 'None'}")
         else:
             await message.reply(f"Channel {channel_id} not found in force-sub channels.")
@@ -207,9 +208,7 @@ async def start_command(client: Client, message: Message):
                 )
                 if copied_msg:
                     codeflix_msgs.append(copied_msg)
-            except Flood
-
-Wait as e:
+            except FloodWait as e:
                 await asyncio.sleep(e.x)
                 try:
                     copied_msg = await msg.copy(
@@ -228,21 +227,26 @@ Wait as e:
                 
         k = await client.send_message(
             chat_id=message.from_user.id,
-            text=f"<b>𝗕𝘂𝗱𝗱𝘆 𝘆𝗼𝘂𝗿 𝗿𝗲𝗾𝘂𝗲𝘀𝘁𝗲𝗱 𝗺𝗮𝘁𝗲𝗿𝗶𝗮𝗹 𝗴𝗼𝗻𝗲 𝗱�_e𝗹𝗲𝘁𝗲 😕 𝗶𝗻 {file_auto_delete}</b>\n\n"
+            text=f"<b>𝗕𝘂𝗱𝗱𝘆 𝘆𝗼𝘂𝗿 𝗿𝗲𝗾𝘂𝗲𝘀𝘁𝗲𝗱 𝗺𝗮𝘁𝗲𝗿𝗶𝗮𝗹 𝗴𝗼𝗻𝗲 𝗱𝗲𝗹𝗲𝘁𝗲 😕 𝗶𝗻 {file_auto_delete}</b>\n\n"
                  f"<b>But Don,t worry 🥰 you again access through my websites 🌟</b>\n\n"
-                 f"<b>𝗔𝗹𝗹 𝗖𝗿𝗲𝗱𝗶𝘁𝘀 𝗳𝗼�_r 𝘁𝗵𝗶𝘀 𝗺𝗮𝘁𝗲𝗿𝗶𝗮𝗹 𝗴𝗼𝗲𝘀 𝘁𝗼 ℍ𝔸ℂ𝕂ℍ𝔼𝕀𝕊𝕋 😈</b>",
+                 f"<b>𝗔𝗹𝗹 𝗖𝗿𝗲𝗱𝗶𝘁𝘀 𝗳𝗼𝗿 𝘁𝗵𝗶𝘀 𝗺𝗮𝘁𝗲𝗿𝗶𝗮𝗹 𝗴𝗼𝗲𝘀 𝘁𝗼 ℍ𝔸ℂ𝕂ℍ𝔼𝕀𝕊𝕋 😈</b>",
         )
 
         codeflix_msgs.append(k)
 
-        special_msg_ids = [44219, 44224, 44225, 44226, 44227, 44228, 44229, 44230, 44231, 44232, 44234, 44235, 44237, 44238, 44240, 44242, 44243, 44244, 44245, 44247, 44248, 44249, 44250, 44251, 44253, 44254, 44255, 44256, 44257, 44258, 44259, 44260, 44261, 44262, 44263, 44264, 44265, 44266, 44267, 44268]
+        # Fixed syntax error in special_msg_ids (removed |)
+        special_msg_ids = [
+            44219, 44224, 44225, 44226, 44227, 44228, 44229, 44230, 44231, 44232, 
+            44234, 44235, 44237, 44238, 44240, 44242, 44243, 44244, 44245, 44247, 
+            44248, 44249, 44250, 44251, 44253, 44254, 44255, 44256, 44257, 44258, 
+            44259, 44260, 44261, 44262, 44263, 44264, 44265, 44266, 44267, 44268
+        ]
 
         random_msg_id = random.choice(special_msg_ids)
 
         try:
             channel_id = DB_CHANNEL_IDS[0] if DB_CHANNEL_IDS else client.db_channel.id
             special_msg = await client.get_messages(channel_id, random_msg_id)
-
             if not special_msg:
                 await client.send_message(chat_id=message.from_user.id, text="⚠️ Special message not found!")
             else:
@@ -261,13 +265,11 @@ Wait as e:
         return
     else:
         reply_markup = InlineKeyboardMarkup(
-            [[
-                InlineKeyboardButton("𝗠𝗔𝗜𝗡 𝗪𝗘𝗕𝗦𝗜𝗧𝗘 😁", url="https://t.me/HIDDEN_OFFgoogle3/3")
-            ], [
-                InlineKeyboardButton("𝐀𝐏𝐍𝐈 𝐊𝐀𝐊𝐒𝐇𝐀 𝗪𝗘𝗕𝗦𝗜𝗧𝗘 😱", url="https://yashyasag.github.io/tesetoss")
-            ], [
-                InlineKeyboardButton("MIT SCHOOL 😁", url="https://mits-ak.github.io/mitbyhh/")
-            ]]
+            [
+                [InlineKeyboardButton("𝗠𝗔𝗜𝗡 𝗪𝗘𝗕𝗦𝗜𝗧𝗘 😁", url="https://t.me/HIDDEN_OFFICIALS_3/3")],
+                [InlineKeyboardButton("𝐀𝐏𝐍𝐈 𝐊𝐀𝐊𝐒𝐇𝐀 𝗪𝗘𝗕𝗦𝗜𝗧𝗘 😱", url="https://yashyasag.github.io/tesetoss")],
+                [InlineKeyboardButton("MIT SCHOOL 😁", url="https://mits-ak.github.io/mitbyhh/")]
+            ]
         )
         await message.reply_text(
             text=START_MSG.format(
@@ -283,37 +285,39 @@ Wait as e:
         )
         return
 
-# Updated not_joined handler with dynamic buttons
 @Bot.on_message(filters.command('start') & filters.private)
 async def not_joined(client: Client, message: Message):
     buttons = []
     force_sub_ids = getattr(client, 'force_sub_ids', [])
     
     if not force_sub_ids:
-        # Fallback to original channels if no force-sub channels are configured
-        buttons = [
-            [
-                InlineKeyboardButton(text="1st Channel", url=client.invitelink2),
-                InlineKeyboardButton(text="2nd Channel", url=client.invitelink3),
-            ],
-            [
-                InlineKeyboardButton(text="3rd channel", url=client.invitelink),
-            ]
-        ]
-    else:
-        # Generate buttons dynamically (two per row)
-        for i in range(0, len(force_sub_ids), 2):
-            row = []
-            for j in range(2):
-                if i + j < len(force_sub_ids):
-                    channel_id = force_sub_ids[i + j]
-                    row.append(
-                        InlineKeyboardButton(
-                            text=f"Join {i + j + 1}",
-                            url=FORCE_SUB_LINKS.get(channel_id, "https://t.me/")
-                        )
+        # Fallback to default message if no force-sub channels
+        await message.reply(
+            text=FORCE_MSG.format(
+                first=message.from_user.first_name,
+                last=message.from_user.last_name,
+                username=None if not message.from_user.username else '@' + message.from_user.username,
+                mention=message.from_user.mention,
+                id=message.from_user.id
+            ),
+            quote=True,
+            disable_web_page_preview=True
+        )
+        return
+    
+    # Generate buttons dynamically (two per row)
+    for i in range(0, len(force_sub_ids), 2):
+        row = []
+        for j in range(2):
+            if i + j < len(force_sub_ids):
+                channel_id = force_sub_ids[i + j]
+                row.append(
+                    InlineKeyboardButton(
+                        text=f"Join {i + j + 1}",
+                        url=client.force_sub_links.get(channel_id, "https://t.me/")
                     )
-            buttons.append(row)
+                )
+        buttons.append(row)
     
     # Add "Now try again" button
     try:
@@ -387,7 +391,6 @@ async def send_text(client: Bot, message: Message):
 ᴜɴꜱᴜᴄᴄᴇꜱꜱꜰᴜʟ: <code>{unsuccessful}</code></b></b>"""
         
         return await pls_wait.edit(status)
-
     else:
         msg = await message.reply("<code>Use this command as a reply to any telegram message without any spaces.</code>")
         await asyncio.sleep(8)
